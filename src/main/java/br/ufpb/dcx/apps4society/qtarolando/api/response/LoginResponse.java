@@ -1,4 +1,4 @@
-package br.ufpb.dcx.apps4society.qtarolando.api.reponse;
+package br.ufpb.dcx.apps4society.qtarolando.api.response;
 
 public class LoginResponse {
 

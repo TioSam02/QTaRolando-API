@@ -2,7 +2,7 @@
 //
 //import br.ufpb.dcx.apps4society.qtarolando.api.dto.CredentialsDTO;
 //import br.ufpb.dcx.apps4society.qtarolando.api.model.UserAccount;
-//import br.ufpb.dcx.apps4society.qtarolando.api.reponse.LoginResponse;
+//import br.ufpb.dcx.apps4society.qtarolando.api.response.LoginResponse;
 //import br.ufpb.dcx.apps4society.qtarolando.api.repository.UserAccountRepository;
 //import br.ufpb.dcx.apps4society.qtarolando.api.security.TokenFilter;
 //import br.ufpb.dcx.apps4society.qtarolando.api.service.exceptions.ObjectNotFoundException;

@@ -35,9 +35,12 @@ public class AuthController implements AuthInterface {
     @Autowired
     private JWTUtils jwtUtils;
 
+    @Autowired
+    private JWTService jwtService;
+
     @Override
     @PostMapping(value = "/login")
-    public ResponseEntity<UserInfoResponse> login(@Valid @RequestBody CredentialsDTO credentials) {
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody CredentialsDTO credentials) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(credentials.getEmail(), credentials.getPassword()));
 
