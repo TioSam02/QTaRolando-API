@@ -3,9 +3,12 @@ package br.ufpb.dcx.apps4society.qtarolando.api.controller.auth;
 import br.ufpb.dcx.apps4society.qtarolando.api.dto.CredentialsDTO;
 import br.ufpb.dcx.apps4society.qtarolando.api.dto.UserAccountNewDTO;
 import br.ufpb.dcx.apps4society.qtarolando.api.dto.UserInfoResponse;
+import br.ufpb.dcx.apps4society.qtarolando.api.response.LoginResponse;
 import br.ufpb.dcx.apps4society.qtarolando.api.security.UserPrincipal;
 import br.ufpb.dcx.apps4society.qtarolando.api.security.jwt.JWTUtils;
+import br.ufpb.dcx.apps4society.qtarolando.api.service.JWTService;
 import br.ufpb.dcx.apps4society.qtarolando.api.service.UserAccountService;
+import br.ufpb.dcx.apps4society.qtarolando.api.service.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -40,25 +43,12 @@ public class AuthController implements AuthInterface {
 
     @Override
     @PostMapping(value = "/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody CredentialsDTO credentials) {
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(credentials.getEmail(), credentials.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
-
-        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(user);
-
-        List<String> roles = user.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .body(new UserInfoResponse(user.getId(),
-                        user.getUsername(),
-                        user.getEmail(),
-                        roles));
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody CredentialsDTO credentialsDTO) {
+        try{
+            return new ResponseEntity<>(jwtService.authenticate(credentialsDTO), HttpStatus.OK);
+        }catch (ObjectNotFoundException exception){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @Override
