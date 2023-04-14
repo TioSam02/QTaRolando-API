@@ -24,7 +24,7 @@ public class UserAccount {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "ID", updatable = false, nullable = false)
-    @ColumnDefault("random_uuid()")
+    @ColumnDefault("gen_random_uuid()")
     @Type(type = "uuid-char")
     @Getter
     @Setter
