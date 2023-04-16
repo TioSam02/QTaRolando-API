@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/events")
@@ -41,11 +43,11 @@ public class EventController implements EventInterface {
 
     @Override
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @ResponseStatus(HttpStatus.CREATED)
     //É possivel criar um mesmo evento multiplas vezes?
-    public void createEvent(@RequestBody EventDTO eventDTO) {
-        eventService.createEvent(eventDTO);
+    public void createEvent(@RequestHeader("Authorization") String token,
+                            @RequestBody EventDTO eventDTO) {
+        eventService.createEvent(token, eventDTO);
     }
 
     @Override

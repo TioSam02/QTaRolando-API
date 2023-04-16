@@ -9,7 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.validation.Valid;
 
 public interface EventInterface {
 
@@ -45,7 +48,8 @@ public interface EventInterface {
             description = "Cria um evento e o associa ao usuário logado",
             tags = {"event"})
     @ApiResponse(responseCode = "201", description = "Evento criado com sucesso")
-    public void createEvent(@RequestBody EventDTO eventDTO);
+    public void createEvent(@RequestHeader("Authorization") String token,
+                            @Valid @RequestBody EventDTO eventDTO);
 
 
     @Operation(summary = "Atualiza os dados de um evento",

@@ -30,17 +30,15 @@ public class JWTService {
     private String TOKEN_KEY = "qtarolando-token";
 
     public LoginResponse authenticate(CredentialsDTO credentialsDTO) throws ObjectNotFoundException {
-
         UserAccount user = userAccountRepository.findByEmail(credentialsDTO.getEmail());
 
         if (user == null){
             throw new ObjectNotFoundException("not found");
         }
 
-        boolean passwodsMatches = passwordEncoder.matches(credentialsDTO.getPassword(), user.getPassword());
+        boolean passwordsMatches = passwordEncoder.matches(credentialsDTO.getPassword(), user.getPassword());
 
-
-        if (passwodsMatches) {
+        if (passwordsMatches) {
             return new LoginResponse(generateToken(credentialsDTO));
         }
         throw new ObjectNotFoundException("object not found");
