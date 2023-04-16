@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -34,11 +35,11 @@ public class EventDTO implements Serializable {
     @Schema(description = "Descrição do evento", example = "Passeio feito através dos pontos turisticos da capital da Paraíba")
     private String description;
 
-    @NotEmpty(message = "Preenchimento obrigatório")
+    @NotBlank(message = "Preenchimento obrigatório")
     @Schema(description = "Data de início do evento", example = "2023-01-01 08:00:00")
     private LocalDateTime initialDate;
 
-    @NotEmpty(message = "Preenchimento obrigatório")
+    @NotBlank(message = "Preenchimento obrigatório")
     @Schema(description = "Data de encerramento do evento", example = "2023-01-01 19:00:00")
     private LocalDateTime finalDate;
 
