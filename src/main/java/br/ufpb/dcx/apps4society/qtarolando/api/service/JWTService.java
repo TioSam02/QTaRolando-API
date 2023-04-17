@@ -33,7 +33,7 @@ public class JWTService {
         UserAccount user = userAccountRepository.findByEmail(credentialsDTO.getEmail());
 
         if (user == null){
-            throw new ObjectNotFoundException("not found");
+            throw new ObjectNotFoundException("object not found");
         }
 
         boolean passwordsMatches = passwordEncoder.matches(credentialsDTO.getPassword(), user.getPassword());
