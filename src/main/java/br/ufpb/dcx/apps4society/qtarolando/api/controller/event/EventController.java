@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -45,7 +47,7 @@ public class EventController implements EventInterface {
     @ResponseStatus(HttpStatus.CREATED)
     //É possivel criar um mesmo evento multiplas vezes?
     public void createEvent(@RequestHeader("Authorization") String token,
-                            @RequestBody EventDTO eventDTO) {
+                            @Valid @RequestBody EventDTO eventDTO) {
         eventService.createEvent(token, eventDTO);
     }
 

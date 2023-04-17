@@ -2,6 +2,7 @@ package br.ufpb.dcx.apps4society.qtarolando.api.model;
 
 import br.ufpb.dcx.apps4society.qtarolando.api.dto.EventDTO;
 import br.ufpb.dcx.apps4society.qtarolando.api.model.enums.EventModality;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,10 +39,12 @@ public class Event {
     @Schema(example = "Passeio feito através dos pontos turisticos da capital da Paraíba")
     private String description;
 
-    @Schema(example = "2023-01-01 08:00:00")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+    @Schema(example = "01/01/2023 08:00")
     private LocalDateTime initialDate;
 
-    @Schema(example = "2023-01-01 19:00:00")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+    @Schema(example = "01/01/2023 19:00")
     private LocalDateTime finalDate;
 
     @Lob

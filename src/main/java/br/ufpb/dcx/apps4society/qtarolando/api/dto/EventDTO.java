@@ -1,6 +1,7 @@
 package br.ufpb.dcx.apps4society.qtarolando.api.dto;
 
 import br.ufpb.dcx.apps4society.qtarolando.api.model.Category;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,12 +37,14 @@ public class EventDTO implements Serializable {
     @Schema(description = "Descrição do evento", example = "Passeio feito através dos pontos turisticos da capital da Paraíba")
     private String description;
 
-    @NotBlank(message = "Preenchimento obrigatório")
-    @Schema(description = "Data de início do evento", example = "2023-01-01 08:00:00")
+    @NotNull
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+    @Schema(description = "Data de início do evento", example = "01/01/2023 08:00")
     private LocalDateTime initialDate;
 
-    @NotBlank(message = "Preenchimento obrigatório")
-    @Schema(description = "Data de encerramento do evento", example = "2023-01-01 19:00:00")
+    @NotNull
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+    @Schema(description = "Data de encerramento do evento", example = "01/01/2023 19:00")
     private LocalDateTime finalDate;
 
     @NotEmpty(message = "Preenchimento obrigatório")
