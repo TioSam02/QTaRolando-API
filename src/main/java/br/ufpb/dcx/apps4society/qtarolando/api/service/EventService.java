@@ -3,7 +3,6 @@ package br.ufpb.dcx.apps4society.qtarolando.api.service;
 import br.ufpb.dcx.apps4society.qtarolando.api.dto.EventDTO;
 import br.ufpb.dcx.apps4society.qtarolando.api.model.Event;
 import br.ufpb.dcx.apps4society.qtarolando.api.model.UserAccount;
-import br.ufpb.dcx.apps4society.qtarolando.api.model.enums.Roles;
 import br.ufpb.dcx.apps4society.qtarolando.api.repository.EventCustomRepository;
 import br.ufpb.dcx.apps4society.qtarolando.api.repository.EventRepository;
 import br.ufpb.dcx.apps4society.qtarolando.api.security.UserPrincipal;
@@ -36,7 +35,12 @@ public class EventService {
     @Autowired
     private JWTService jwtService;
 
-    public Event getEventById(Integer id) throws ObjectNotFoundException {
+    public Event getEventById(String token, Integer id) throws ObjectNotFoundException {
+        Optional<String> userEmail = jwtService.recoverUser(token);
+        if (!userEmail.isPresent()) {
+            throw new ObjectNotFoundException("Usuario não está logado");
+        }
+
         return eventRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException(
                         "Evento não encontrado! Id: " + id + ", Tipo: " + Event.class.getName()));
@@ -71,24 +75,19 @@ public class EventService {
     }
 
     @Transactional
-    public void updateEvent(Integer id, EventDTO newEventDTO) throws ObjectNotFoundException {
-//        UserPrincipal userSS = UserAccountService.getUserAuthenticated();
-//        if (userSS == null) {
-//            throw new AuthorizationException("Acesso negado");
-//        }
-        Optional<Event> event = eventRepository.findById(id);
-        if (!event.isPresent()) {
+    public void updateEvent(String token, Integer id, EventDTO newEventDTO) throws ObjectNotFoundException {
+        UserAccount user = validateUser(token);
+
+        Event event = getEventById(token, id);
+        if (event == null) {
             throw new ObjectNotFoundException("Evento não encontrado! Id: " + id + ", Tipo: " + Event.class.getName());
         }
-
-//        UserAccount userAccount = userAccountService.findByEmail(userSS.getEmail());
-//        if (userAccount.getEvents().contains(event.get()) || userSS.hasRole(Roles.ADMIN)) {
-            Event newEvent = event.get();
-            BeanUtils.copyProperties(newEventDTO, newEvent, "id");
-            eventRepository.save(newEvent);
-//        } else {
+        if (!user.getEvents().contains(event)) {
             throw new AuthorizationException("Acesso negado");
-//        }
+        }
+
+        BeanUtils.copyProperties(newEventDTO, event, "id");
+        eventRepository.save(event);
     }
 
     @Transactional
@@ -110,7 +109,7 @@ public class EventService {
         }
     }
 
-    private UserAccount validateUser(String token) throws ObjectNotFoundException{
+    private UserAccount validateUser(String token) throws ObjectNotFoundException {
         Optional<String> userEmail = jwtService.recoverUser(token);
 
         Optional<UserAccount> userOptional = Optional.of(userAccountService.findByEmail(userEmail.get()));

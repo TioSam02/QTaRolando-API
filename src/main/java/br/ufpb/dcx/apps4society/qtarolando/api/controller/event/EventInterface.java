@@ -22,7 +22,8 @@ public interface EventInterface {
             @ApiResponse(responseCode = "200", description = "Operação feita com sucesso"),
             @ApiResponse(responseCode = "404", description = "Quando o evento não é encontrado")
     })
-    public Event getEventById(@PathVariable("id") Integer id);
+    public Event getEventById(@RequestHeader("Authorization") String token,
+                              @PathVariable("id") Integer id);
 
 
     @Operation(summary = "Filtro usado para a pesquisa de evento",
@@ -61,7 +62,9 @@ public interface EventInterface {
             @ApiResponse(responseCode = "403", description = "Quando não é o criador do evento"),
             @ApiResponse(responseCode = "404", description = "Quando o evento não é encontrado")
     })
-    public void updateEvent(@PathVariable("id") Integer id, @RequestBody EventDTO newEventDTO);
+    public void updateEvent(@RequestHeader("Authorization") String token,
+                            @Valid @PathVariable("id") Integer id,
+                            @RequestBody EventDTO newEventDTO);
 
 
     @Operation(summary = "Deleta os dados de um evento",

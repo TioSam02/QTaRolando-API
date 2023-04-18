@@ -22,8 +22,9 @@ public class EventController implements EventInterface {
 
     @Override
     @GetMapping("/{id}")
-    public Event getEventById(@PathVariable("id") Integer id) {
-        return eventService.getEventById(id);
+    public Event getEventById(@RequestHeader("Authorization") String token,
+                              @PathVariable("id") Integer id) {
+        return eventService.getEventById(token, id);
     }
 
     @Override
@@ -55,8 +56,10 @@ public class EventController implements EventInterface {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateEvent(@PathVariable("id") Integer id, @RequestBody EventDTO newEventDTO) {
-        eventService.updateEvent(id, newEventDTO);
+    public void updateEvent(@RequestHeader("Authorization") String token,
+                            @Valid @PathVariable("id") Integer id,
+                            @RequestBody EventDTO newEventDTO) {
+        eventService.updateEvent(token, id, newEventDTO);
     }
 
     @Override
