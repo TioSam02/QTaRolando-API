@@ -54,7 +54,7 @@ public class EventController implements EventInterface {
 
     @Override
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateEvent(@RequestHeader("Authorization") String token,
                             @Valid @PathVariable("id") Integer id,
@@ -64,7 +64,7 @@ public class EventController implements EventInterface {
 
     @Override
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEvent(@PathVariable("id") Integer id) {
         eventService.deleteEvent(id);
