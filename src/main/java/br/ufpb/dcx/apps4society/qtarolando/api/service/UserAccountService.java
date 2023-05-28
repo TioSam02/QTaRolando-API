@@ -35,10 +35,6 @@ public class UserAccountService {
     private RoleRepository roleRepository;
 
     public UserAccount find(UUID id) {
-//        UserPrincipal user = getUserAuthenticated();
-//        if (user == null || !user.hasRole(Roles.ADMIN) && !id.equals(user.getId())) {
-//            throw new AuthorizationException("Acesso negado");
-//        }
 
         Optional<UserAccount> obj = userRepository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException(
@@ -50,10 +46,6 @@ public class UserAccountService {
     }
 
     public UserAccount findByEmail(String email) {
-//        UserPrincipal user = getUserAuthenticated();
-//        if (user == null || !user.hasRole(Roles.ADMIN) && !email.equals(user.getEmail())) {
-//            throw new AuthorizationException("Acesso negado");
-//        }
 
         UserAccount obj = userRepository.findByEmail(email);
         if (obj == null) {
@@ -65,7 +57,7 @@ public class UserAccountService {
     public UserAccount findByUsername(String userName) {
         UserPrincipal user = getUserAuthenticated();
         if (user == null || !user.hasRole(Roles.ADMIN) && !userName.equals(user.getUsername())) {
-            throw new AuthorizationException("Acesso negado");
+            throw new AuthorizationException("Acesso negado 4");
         }
 
         UserAccount obj = userRepository.findByUsername(userName);

@@ -1,10 +1,12 @@
 package br.ufpb.dcx.apps4society.qtarolando.api.integration;
 
+import br.ufpb.dcx.apps4society.qtarolando.api.config.ContainersEnvironment;
 import br.ufpb.dcx.apps4society.qtarolando.api.dto.CredentialsDTO;
 import br.ufpb.dcx.apps4society.qtarolando.api.dto.UserAccountNewDTO;
 import br.ufpb.dcx.apps4society.qtarolando.api.dto.UserInfoResponse;
 import br.ufpb.dcx.apps4society.qtarolando.api.model.UserAccount;
 import br.ufpb.dcx.apps4society.qtarolando.api.repository.UserAccountRepository;
+import br.ufpb.dcx.apps4society.qtarolando.api.response.LoginResponse;
 import br.ufpb.dcx.apps4society.qtarolando.api.service.UserAccountService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,13 +16,19 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.test.context.ActiveProfiles;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-@AutoConfigureTestDatabase
+@ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AuthControllerIT {
+public class AuthControllerIT extends ContainersEnvironment {
 
     @Autowired
     private TestRestTemplate authTestRestTemplate;
@@ -40,23 +48,24 @@ public class AuthControllerIT {
 
     @Test
     void login_returnsStatusOk_whenSuccessful(){
+
+
+
         String passwordWithoutCryptography = "12345678";
         UserAccountNewDTO user = new UserAccountNewDTO("wb@gmail.com", "wellington", passwordWithoutCryptography);
         UserAccount savedUser = userAccountService.insert(user);
 
         CredentialsDTO credentials = new CredentialsDTO(savedUser.getEmail(), passwordWithoutCryptography);
 
-        ResponseEntity<UserInfoResponse> response = authTestRestTemplate.postForEntity(
-                BASE_URL+"login", credentials, UserInfoResponse.class);
+        ResponseEntity<LoginResponse> response = authTestRestTemplate.postForEntity(
+                BASE_URL+"login", credentials, LoginResponse.class);
 
         Assertions.assertThat(response.getStatusCode())
                 .isEqualTo(HttpStatus.OK);
 
-        Assertions.assertThat(response.getBody().getEmail())
-                .isEqualTo(savedUser.getEmail());
+        Assertions.assertThat(response.getBody().getToken())
+                .isNotNull();
 
-        Assertions.assertThat(response.getBody().getUsername())
-                .isEqualTo(savedUser.getUsername());
 
     }
 

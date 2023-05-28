@@ -36,14 +36,16 @@ public class EventService {
     private JWTService jwtService;
 
     public Event getEventById(String token, Integer id) throws ObjectNotFoundException {
+        log.info("entrou");
         Optional<String> userEmail = jwtService.recoverUser(token);
+        log.info(userEmail);
         if (!userEmail.isPresent()) {
             throw new ObjectNotFoundException("Usuario não está logado");
         }
 
         return eventRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException(
-                        "Evento não encontrado! Id: " + id + ", Tipo: " + Event.class.getName()));
+                        "Evento não encontrado!ee Id: " + id + ", Tipo: " + Event.class.getName()));
     }
 
     @Transactional
@@ -60,11 +62,9 @@ public class EventService {
 
     @Transactional
     public void createEvent(String token, EventDTO eventDTO) {
+        log.info("entrou");
         UserAccount user = validateUser(token);
-
-        log.info(token);
         log.info(user);
-
 
         Event newEvent = new Event(eventDTO);
         eventRepository.save(newEvent);
@@ -83,7 +83,7 @@ public class EventService {
             throw new ObjectNotFoundException("Evento não encontrado! Id: " + id + ", Tipo: " + Event.class.getName());
         }
         if (!user.getEvents().contains(event)) {
-            throw new AuthorizationException("Acesso negado");
+            throw new AuthorizationException("Acesso negado 3");
         }
 
         BeanUtils.copyProperties(newEventDTO, event, "id");
@@ -94,7 +94,7 @@ public class EventService {
     public void deleteEvent(Integer id) throws ObjectNotFoundException {
         UserPrincipal userSS = UserAccountService.getUserAuthenticated();
         if (userSS == null) {
-            throw new AuthorizationException("Acesso negado");
+            throw new AuthorizationException("Acesso negado 1");
         }
         Optional<Event> event = eventRepository.findById(id);
         if (!event.isPresent()) {
@@ -105,15 +105,18 @@ public class EventService {
         if (userAccount.getEvents().contains(event.get())) {
             eventRepository.delete(event.get());
         } else {
-            throw new AuthorizationException("Acesso negado");
+            throw new AuthorizationException("Acesso negado 2");
         }
     }
 
     private UserAccount validateUser(String token) throws ObjectNotFoundException {
         Optional<String> userEmail = jwtService.recoverUser(token);
+        log.info(userEmail);
 
-        Optional<UserAccount> userOptional = Optional.of(userAccountService.findByEmail(userEmail.get()));
+        if(!userEmail.isPresent()) {
+            throw new ObjectNotFoundException("Usuário não encontrado!");
 
-        return userOptional.orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado!"));
+        }
+        return userAccountService.findByEmail(userEmail.get());
     }
 }

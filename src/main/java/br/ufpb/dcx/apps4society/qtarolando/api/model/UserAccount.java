@@ -6,6 +6,9 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;

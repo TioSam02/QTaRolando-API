@@ -2,9 +2,7 @@ package br.ufpb.dcx.apps4society.qtarolando.api.controller.auth;
 
 import br.ufpb.dcx.apps4society.qtarolando.api.dto.CredentialsDTO;
 import br.ufpb.dcx.apps4society.qtarolando.api.dto.UserAccountNewDTO;
-import br.ufpb.dcx.apps4society.qtarolando.api.dto.UserInfoResponse;
 import br.ufpb.dcx.apps4society.qtarolando.api.response.LoginResponse;
-import br.ufpb.dcx.apps4society.qtarolando.api.security.UserPrincipal;
 import br.ufpb.dcx.apps4society.qtarolando.api.security.jwt.JWTUtils;
 import br.ufpb.dcx.apps4society.qtarolando.api.service.JWTService;
 import br.ufpb.dcx.apps4society.qtarolando.api.service.UserAccountService;
@@ -15,14 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -44,9 +37,9 @@ public class AuthController implements AuthInterface {
     @Override
     @PostMapping(value = "/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody CredentialsDTO credentialsDTO) {
-        try{
-            return new ResponseEntity<>(jwtService.authenticate(credentialsDTO), HttpStatus.OK);
-        }catch (ObjectNotFoundException exception){
+        try {
+            return new ResponseEntity<LoginResponse>(jwtService.authenticate(credentialsDTO), HttpStatus.OK);
+        } catch (ObjectNotFoundException exception) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
