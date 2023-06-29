@@ -60,9 +60,9 @@ public class UserController implements UserInterface {
     //NonUniqueResultException: query did not return a unique result: 2
     @Override
     @GetMapping(value = "/username")
-    public ResponseEntity<UserAccount> findByUsername(@RequestParam(value = "value") String userName) {
+    public UserAccount findByUsername(@RequestParam(value = "value") String userName) {
         UserAccount obj = service.findByUsername(userName);
-        return ResponseEntity.ok().body(obj);
+        return obj;
     }
 
     //TODO:

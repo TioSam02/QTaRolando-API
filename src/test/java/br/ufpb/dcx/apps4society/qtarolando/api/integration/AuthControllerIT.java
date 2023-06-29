@@ -11,6 +11,7 @@ import br.ufpb.dcx.apps4society.qtarolando.api.service.UserAccountService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +30,7 @@ import java.util.List;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AuthControllerIT extends ContainersEnvironment {
+public class AuthControllerIT extends ContainersEnvironment  {
 
     @Autowired
     private TestRestTemplate authTestRestTemplate;
@@ -52,7 +54,7 @@ public class AuthControllerIT extends ContainersEnvironment {
 
 
         String passwordWithoutCryptography = "12345678";
-        UserAccountNewDTO user = new UserAccountNewDTO("wb@gmail.com", "wellington", passwordWithoutCryptography);
+        UserAccountNewDTO user = new UserAccountNewDTO("teste10@gmail.com", "wellington", passwordWithoutCryptography);
         UserAccount savedUser = userAccountService.insert(user);
 
         CredentialsDTO credentials = new CredentialsDTO(savedUser.getEmail(), passwordWithoutCryptography);
